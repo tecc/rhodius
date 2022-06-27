@@ -1,0 +1,4 @@
+[submodule "ext/cwalk"]
+	path = ext/cwalk
+	url = https://github.com/likle/cwalk.git
+	branch = stable
