@@ -1,5 +1,5 @@
 #include <malloc.h>
-#include <rhodius/_io.h>
+#include <rhodius/_platform.h>
 #include <rhodius/log.h>
 #include <rhodius/scripting/_script.h>
 #include <rhodius/scripting/script.h>
@@ -24,7 +24,7 @@ void RhScript_Load(struct RhScript* out, const char* filename) {
     RhScript_Init(out);
     out->data->freeFilename = true;
 
-    if (RhIO_FileExists(filename) == false) {
+    if (RhPlatform_FileExists(filename) == false) {
         RhScript_Destroy(out);
         RhLog_Error("%s is not a file", filename);
         exit(1);

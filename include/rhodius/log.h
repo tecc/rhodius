@@ -41,13 +41,15 @@ enum RhLogLevel { // The values correspond to how verbose they are; Trace is the
 };
 
 bool RhLog_CanLog(enum RhLogLevel level);
+enum RhLogLevel RhLog_GetLevelFromInt(int16_t value);
 void RhLog_SetLogLevel(enum RhLogLevel level);
+void RhLog_SetColoursEnabled(bool enabled);
+
 void RhLog_Log(enum RhLogLevel level, const char* format, ...);
 void RhLog_Trace(const char* format, ...);
 void RhLog_Debug(const char* format, ...);
 void RhLog_Info(const char* format, ...);
 void RhLog_Warn(const char* format, ...);
 void RhLog_Error(const char* format, ...);
-enum RhLogLevel RhLog_GetLevelFromInt(int16_t value);
 
 #endif

@@ -1,10 +1,12 @@
 #ifndef RHODIUS_OPTIONS_H
 #define RHODIUS_OPTIONS_H
+#include <stdint.h>
 
 struct RhOptions {
     const char* mainBuildFile; // -m, --main-build-file
     const char* workingDirectory; // -c, -cwd, --current-working-directory
-    int verbosity;
+    int16_t verbosity;
+    bool enableTerminalColours : 1;
 };
 
 void RhOptions_SetDefault(struct RhOptions* out);

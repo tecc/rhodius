@@ -1,5 +1,5 @@
 #include <malloc.h>
-#include <rhodius/_io.h>
+#include <rhodius/_platform.h>
 #include <rhodius/_util.h>
 #include <rhodius/options.h>
 #include <stdbool.h>
@@ -12,7 +12,9 @@ static const struct RhOptions* g_options;
 void RhOptions_SetDefault(struct RhOptions* out) {
     out->mainBuildFile = "build.rhodius.lua";
     out->workingDirectory = malloc(RhPATH_MAX);
-    RhIO_GetWorkingDirectory(out->workingDirectory, RhPATH_MAX);
+    RhPlatform_GetWorkingDirectory(out->workingDirectory, RhPATH_MAX);
+    out->verbosity = 0;
+    out->enableTerminalColours = RhPlatform_TerminalSupportsColour();
 }
 
 enum RhOptionsParserState {
@@ -44,7 +46,8 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
                 temp = malloc(argl * sizeof(char));
                 strcpy(temp, arg);
                 out->mainBuildFile = temp;
-                break;
+                state = Rh_Waiting;
+                continue;
             default:
                 break;
         }
@@ -66,6 +69,14 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
 
                 if (strcmp(arg + 2, "main-build-file") == 0) {
                     state = Rh_MainBuildFile;
+                    continue;
+                }
+                if (strcmp(arg + 2, "colours") == 0) {
+                    out->enableTerminalColours = true;
+                    continue;
+                }
+                if (strcmp(arg + 2, "no-colours") == 0) {
+                    out->enableTerminalColours = false;
                     continue;
                 }
             } else {

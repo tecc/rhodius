@@ -5,11 +5,45 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#ifndef RhLog_DEFAULT_LEVEL
+#ifdef RHODIUS_BUILD_DEBUG
+#define RhLog_DEFAULT_LEVEL RhLogLevel_Debug
+#else
+#define RhLog_DEFAULT_LEVEL RhLogLevel_Info
+#endif
+#endif
+
+static enum RhLogLevel RhLog_LogLevel = RhLog_DEFAULT_LEVEL;
+static bool RhLog_ColoursEnabled = false;
+
+bool RhLog_CanLog(enum RhLogLevel level) {
+    return level <= RhLog_LogLevel;
+}
+void RhLog_SetLogLevel(enum RhLogLevel level) {
+    RhLog_LogLevel = level;
+}
+void RhLog_SetColoursEnabled(bool enabled) {
+    RhLog_ColoursEnabled = enabled;
+}
+inline enum RhLogLevel RhLog_GetLevelFromInt(int16_t value) {
+    if (value <= RhLogLevel_Error) {
+        return RhLogLevel_Error;
+    }
+    if (value >= RhLogLevel_Trace) {
+        return RhLogLevel_Trace;
+    }
+    return (enum RhLogLevel) value;
+}
+
+
+
 void RhLog_PrintColour_2(FILE* file, enum RhLogColour background, enum RhLogColour foreground) {
-    fprintf(file, RhCOLOUR_FORMAT RhCOLOUR_FORMAT, background + 10, foreground);
+    if (RhLog_ColoursEnabled)
+        fprintf(file, RhCOLOUR_FORMAT RhCOLOUR_FORMAT, background + 10, foreground);
 }
 void RhLog_PrintColour(FILE* file, enum RhLogColour colour, bool isBackground) {
-    fprintf(file, RhCOLOUR_FORMAT, colour + (isBackground == true ? 10 : 0));
+    if (RhLog_ColoursEnabled)
+        fprintf(file, RhCOLOUR_FORMAT, colour + (isBackground == true ? 10 : 0));
 }
 
 #define RhLog_Generic(out, prefixbg, prefixfg, prefix, msgbg, msgfg, va_list) \
@@ -18,7 +52,9 @@ void RhLog_PrintColour(FILE* file, enum RhLogColour colour, bool isBackground) {
     RhLog_PrintColour(out, RhLogColour_Reset, false);                         \
     fprintf(out, " ");                                                        \
     RhLog_PrintColour_2(out, msgbg, msgfg);                                   \
-    vfprintf(out, format, va_list)
+    vfprintf(out, format, va_list);                                           \
+    fprintf(out, "\n");                                                       \
+    RhLog_PrintColour(out, RhLogColour_Reset, false)
 
 #define RhLog_CanLog_(level)                 \
     if (!RhLog_CanLog(RhLogLevel_##level)) { \
@@ -86,29 +122,4 @@ void RhLog_Error(const char* format, ...) {
     RhLog_InitVa();
     RhLog_Error_();
     va_end(va_list);
-}
-
-#ifndef RhLog_DEFAULT_LEVEL
-#ifdef RHODIUS_BUILD_DEBUG
-#define RhLog_DEFAULT_LEVEL RhLogLevel_Debug
-#else
-#define RhLog_DEFAULT_LEVEL RhLogLevel_Info
-#endif
-#endif
-static enum RhLogLevel RhLog_LogLevel = RhLog_DEFAULT_LEVEL;
-bool RhLog_CanLog(enum RhLogLevel level) {
-    return level <= RhLog_LogLevel;
-}
-void RhLog_SetLogLevel(enum RhLogLevel level) {
-    RhLog_LogLevel = level;
-}
-
-inline enum RhLogLevel RhLog_GetLevelFromInt(int16_t value) {
-    if (value <= RhLogLevel_Error) {
-        return RhLogLevel_Error;
-    }
-    if (value >= RhLogLevel_Trace) {
-        return RhLogLevel_Trace;
-    }
-    return (enum RhLogLevel) value;
 }

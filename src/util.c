@@ -1,10 +1,10 @@
-#include <rhodius/options.h>
+#include <cwalk.h>
 #include <malloc.h>
-#include <rhodius/_io.h>
+#include <rhodius/_platform.h>
 #include <rhodius/_util.h>
+#include <rhodius/options.h>
 #include <stdarg.h>
 #include <string.h>
-#include <cwalk.h>
 
 char* RhUtil_CopyString(const char* string) {
     size_t length = strlen(string);
