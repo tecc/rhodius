@@ -36,7 +36,6 @@ inline enum RhLogLevel RhLog_GetLevelFromInt(int16_t value) {
 }
 
 
-
 void RhLog_PrintColour_2(FILE* file, enum RhLogColour background, enum RhLogColour foreground) {
     if (RhLog_ColoursEnabled)
         fprintf(file, RhCOLOUR_FORMAT RhCOLOUR_FORMAT, background + 10, foreground);
@@ -65,8 +64,8 @@ void RhLog_PrintColour(FILE* file, enum RhLogColour colour, bool isBackground) {
     va_start(va_list, format)
 #define RhLog_Trace_() RhLog_Generic(stdout, RhLogColour_Reset, RhLogColour_Grey, "Trace", RhLogColour_Reset, RhLogColour_White, va_list)
 #define RhLog_Debug_() RhLog_Generic(stdout, RhLogColour_Reset, RhLogColour_BrightBlue, "Debug", RhLogColour_Reset, RhLogColour_Reset, va_list)
-#define RhLog_Info_() RhLog_Generic(stdout, RhLogColour_Reset, RhLogColour_BrightWhite, "Info", RhLogColour_Reset, RhLogColour_Reset, va_list)
-#define RhLog_Warn_() RhLog_Generic(stderr, RhLogColour_Yellow, RhLogColour_BrightWhite, " Warn ", RhLogColour_Reset, RhLogColour_Yellow, va_list)
+#define RhLog_Info_()  RhLog_Generic(stdout, RhLogColour_Reset, RhLogColour_BrightWhite, "Info", RhLogColour_Reset, RhLogColour_Reset, va_list)
+#define RhLog_Warn_()  RhLog_Generic(stderr, RhLogColour_Yellow, RhLogColour_BrightWhite, " Warn ", RhLogColour_Reset, RhLogColour_Yellow, va_list)
 #define RhLog_Error_() RhLog_Generic(stderr, RhLogColour_BrightRed, RhLogColour_BrightWhite, " Error ", RhLogColour_Reset, RhLogColour_BrightRed, va_list)
 
 void RhLog_Log(enum RhLogLevel level, const char* format, ...) {

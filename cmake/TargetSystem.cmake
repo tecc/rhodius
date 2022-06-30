@@ -125,7 +125,7 @@ function(target_architecture output_var)
         # If we are compiling with an unknown architecture this variable should
         # already be set to "unknown" but in the case that it's empty (i.e. due
         # to a typo in the code), then set it to unknown
-        if (NOT ARCH)
+        if(NOT ARCH)
             set(ARCH unknown)
         endif()
     endif()

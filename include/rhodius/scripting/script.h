@@ -12,7 +12,11 @@ struct RhScript {
 
     struct RhProject* project;
 };
-#define EMPTY_SCRIPT {data: NULL, parent: NULL, filename: NULL}
+#define EMPTY_SCRIPT                         \
+    {                                        \
+    data:                                    \
+        NULL, parent : NULL, filename : NULL \
+    }
 
 struct RhScript* RhScript_CreateEmpty();
 

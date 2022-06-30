@@ -11,9 +11,9 @@ enum RhPlatform_TermCap {
     RhPlatform_TermCap_ExplicitYes
 };
 
-#define RhPlatform_TermCap_IsYes(cap) ((cap) == RhPlatform_TermCap_ImplicitYes || (cap) == RhPlatform_TermCap_ExplicitYes)
+#define RhPlatform_TermCap_IsYes(cap)      ((cap) == RhPlatform_TermCap_ImplicitYes || (cap) == RhPlatform_TermCap_ExplicitYes)
 #define RhPlatform_TermCap_IsExplicit(cap) ((cap) == RhPlatform_TermCap_ExplicitNo || (cap) == RhPlatform_TermCap_ExplicitYes)
-#define RhPlatform_CAP_MAX_LENGTH 256
+#define RhPlatform_CAP_MAX_LENGTH          256
 
 bool RhPlatform_Term_IsSeparator(char c);
 enum RhPlatform_TermCap RhPlatform_Term_ColourCap(const char* cap);

@@ -98,5 +98,4 @@ int main(int argc, char** argv) {
     mainScript = RhScript_CreateEmpty();
     RhLog_Debug("Configuring %s...\n", options->mainBuildFile);
     RhScript_Load(mainScript, options->mainBuildFile);
-
 }

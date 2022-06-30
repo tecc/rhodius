@@ -1,10 +1,10 @@
 #include "rhodius/_util.h"
 #include <errno.h>
 #include <libgen.h>
-#include <rhodius/util/linkedlist.h>
 #include <rhodius/log.h>
 #include <rhodius/plugins.h>
 #include <rhodius/scripting/_script.h>
+#include <rhodius/util/linkedlist.h>
 #include <stdlib.h>
 #include <string.h>
 

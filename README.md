@@ -1,6 +1,6 @@
 # Rhodius Build Automation Utility
 
-Rhodius is a build automation utility. 
+Rhodius is a build automation utility.
 
 ## Usage
 

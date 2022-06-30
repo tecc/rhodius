@@ -20,7 +20,7 @@ void RhOptions_SetDefault(struct RhOptions* out) {
     buffer = malloc(RhPATH_MAX);
     RhPlatform_GetUserHomeDirectory(buffer, RhPATH_MAX);
     out->rhodiusDataDirectory = RhUtil_ResolvePath(2, buffer, ".rhodius"); // ~/.rhodius
-    free(buffer); // Avoiding memory leaks since 2022
+    free(buffer);                                                          // Avoiding memory leaks since 2022
     if (!RhPlatform_FileExists(out->rhodiusDataDirectory)) {
         RhPlatform_MakeDirectoryRecursive(out->rhodiusDataDirectory);
     }

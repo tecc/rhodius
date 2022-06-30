@@ -10,18 +10,21 @@
 ---
 --- Require plugins.
 ---
-function require_plugins(...) end
+function require_plugins(...)
+end
 
 ---
 --- Use certain features not active by default.
 --- Features are provided
 ---
 --- @vararg string
-function use_features(...) end
+function use_features(...)
+end
 
 ---
 ---
-function project(name) end
+function project(name)
+end
 
 ---
 --- Get a path relative to the current script directory.
@@ -31,7 +34,8 @@ function project(name) end
 --- the function will return "/path/to/example/example.txt".
 ---
 --- @param name string
-function path(name) end
+function path(name)
+end
 
 
 -- Main plugin definitions
@@ -39,4 +43,5 @@ function path(name) end
 --- It is recommended to use the path function for the source_path parameter.
 --- @param name string
 --- @param source_path string
-function add_template(name, source_path) end
+function add_template(name, source_path)
+end

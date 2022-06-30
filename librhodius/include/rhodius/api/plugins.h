@@ -9,8 +9,8 @@
 
 struct RhAPI_Plugin;
 
-typedef bool(*RhAPI_Plugin_ScriptingFeatureFinder)(struct RhAPI_Plugin*, lua_State* luaState, const char* featureName);
-typedef void(*RhAPI_Plugin_Destroyer)(struct RhAPI_Plugin*);
+typedef bool (*RhAPI_Plugin_ScriptingFeatureFinder)(struct RhAPI_Plugin*, lua_State* luaState, const char* featureName);
+typedef void (*RhAPI_Plugin_Destroyer)(struct RhAPI_Plugin*);
 
 struct RhAPI_Plugin {
     const char* name;

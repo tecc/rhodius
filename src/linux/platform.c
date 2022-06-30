@@ -60,7 +60,6 @@ enum RhAPI_Error RhPlatform_MakeDirectoryRecursive(const char* directory) {
                 return RhAPI_Error_GenericIssue; // TODO(tecc): Add more errors
         }
     }
-
 }
 
 void RhPlatform_GetWorkingDirectory(char* out, size_t maxLength) {
