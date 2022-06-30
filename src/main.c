@@ -1,7 +1,7 @@
 #define RHODIUS_LOG_COLOURS
 #include <rhodius/log.h>
-#include <rhodius/mainplugin.h>
 #include <rhodius/options.h>
+#include <rhodius/platform.h>
 #include <rhodius/plugins.h>
 #include <rhodius/scripting/script.h>
 #include <stdio.h>
@@ -15,14 +15,16 @@ void onexit() {
     RhScript_Destroy(mainScript);
 }
 
-char* generatePadding(size_t target, size_t base) {
+enum RhAPI_Error generatePadding(size_t target, size_t base, char* padding, size_t maxLength) {
     size_t paddingLength = (target - base) >> 1;
-    char* padding = malloc(paddingLength + 1);
+    if (maxLength < paddingLength + 1) {
+        return RhAPI_Error_TooSmallBuffer;
+    }
     padding[paddingLength] = '\0';
     for (int i = 0; i < paddingLength; i++) {
         padding[i] = ' ';
     }
-    return padding;
+    return RhAPI_Error_Ok;
 }
 #define GENERIC_TARGET 40
 void printHeader() {
@@ -30,24 +32,33 @@ void printHeader() {
     const char line1[] = "Copyright (c) tecc.me 2022.";
     const char line2[] = "Licensed under the MIT licence.";
     const char* lines[] = {line1, line2, NULL};
-    char* headerPadding = generatePadding(GENERIC_TARGET, strlen(version) + 20);
+
+    char padding[RhPlatform_SMALL_BUFFER_SIZE];
+    enum RhAPI_Error error = generatePadding(GENERIC_TARGET, strlen(version) + 20, padding, RhPlatform_SMALL_BUFFER_SIZE);
+
+    if (error != RhAPI_Error_Ok) {
+        exit(error);
+    }
 
     RhLog_PrintColour_2(stdout, RhLogColour_Reset, RhLogColour_BrightGreen);
-    fprintf(stdout, "%sRhodius Build Tool ", headerPadding); // NOTE: Don't forget to update restLength!
+    fprintf(stdout, "%sRhodius Build Tool ", padding); // NOTE: Don't forget to update restLength!
     RhLog_PrintColour(stdout, RhLogColour_BrightYellow, false);
-    fprintf(stdout, "v%s%s\n", version, headerPadding);
+    fprintf(stdout, "v%s%s\n", version, padding);
     RhLog_PrintColour(stdout, RhLogColour_Reset, false);
 
-    free(headerPadding);
 
     int i = 0;
+
     while (lines[i] != NULL) {
-        const char* line = lines[i];
-        char* padding = generatePadding(GENERIC_TARGET, strlen(line));
         RhLog_PrintColour(stdout, RhLogColour_White, false);
 
+        const char* line = lines[i];
+        error = generatePadding(GENERIC_TARGET, strlen(line), padding, RhPlatform_SMALL_BUFFER_SIZE);
+        if (error != RhAPI_Error_Ok) {
+            exit(error);
+        }
         fprintf(stdout, "%s%s%s\n", padding, line, padding);
-        free(padding);
+
         i++;
     }
 
@@ -64,13 +75,8 @@ void initialisePlugins() {
     }
 }
 
-
-
-void registerMainPlugin() {
-    RhLog_Trace("Registering main plugin");
-
-    RhMainPlugin_Register();
-
+void registerPlugins() {
+    RhLog_Trace("Registering plugins");
 }
 
 int main(int argc, char** argv) {
@@ -87,7 +93,7 @@ int main(int argc, char** argv) {
     printHeader();
 
     initialisePlugins();
-    registerMainPlugin();
+    registerPlugins();
 
     mainScript = RhScript_CreateEmpty();
     RhLog_Debug("Configuring %s...\n", options->mainBuildFile);

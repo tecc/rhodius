@@ -4,13 +4,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#ifndef RHODIUS_VERSION
-#define RHODIUS_API extern
-#else
-#define RHODIUS_API
-#endif
-
-#include <lua.h>
+#include <rhodius/api/def.h>
+#include <rhodius/api/lua.h>
 
 struct RhAPI_Plugin;
 
@@ -26,8 +21,17 @@ struct RhAPI_Plugin {
     RhAPI_Plugin_Destroyer destroyer;
 };
 
+RHODIUS_API void RhAPI_LoadPluginFile(const char* filename, struct RhAPI_Plugin* out); // Loads and registers
 RHODIUS_API void RhAPI_Plugin_Create(struct RhAPI_Plugin* out, const char* name, void* data, RhAPI_Plugin_ScriptingFeatureFinder featureFinder, RhAPI_Plugin_Destroyer destroyer);
 RHODIUS_API void RhAPI_Plugin_Register(struct RhAPI_Plugin* plugin);
 RHODIUS_API bool RhAPI_Plugin_FindScriptingFeature(struct RhAPI_Plugin* plugin, lua_State* state, const char* featureName);
+
+RHODIUS_API void RhAPI_Plugin_LogTrace(const struct RhAPI_Plugin* plugin, const char* format, ...);
+RHODIUS_API void RhAPI_Plugin_LogDebug(const struct RhAPI_Plugin* plugin, const char* format, ...);
+RHODIUS_API void RhAPI_Plugin_LogInfo(const struct RhAPI_Plugin* plugin, const char* format, ...);
+RHODIUS_API void RhAPI_Plugin_LogWarn(const struct RhAPI_Plugin* plugin, const char* format, ...);
+RHODIUS_API void RhAPI_Plugin_LogError(const struct RhAPI_Plugin* plugin, const char* format, ...);
+
+RHODIUS_PLUGIN_DEF void RhPlugin_Register(); // Implemented by plugin
 
 #endif

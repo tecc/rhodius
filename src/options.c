@@ -1,20 +1,33 @@
 #include <malloc.h>
-#include <rhodius/_platform.h>
 #include <rhodius/_util.h>
 #include <rhodius/options.h>
+#include <rhodius/platform.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
 
-static const struct RhOptions* g_options;
+static const struct RhOptions* RhOptions_Instance;
 
 void RhOptions_SetDefault(struct RhOptions* out) {
     out->mainBuildFile = "build.rhodius.lua";
-    out->workingDirectory = malloc(RhPATH_MAX);
-    RhPlatform_GetWorkingDirectory(out->workingDirectory, RhPATH_MAX);
+
+    char* buffer = malloc(RhPATH_MAX);
+    RhPlatform_GetWorkingDirectory(buffer, RhPATH_MAX);
+    out->workingDirectory = buffer;
     out->verbosity = 0;
-    out->enableTerminalColours = RhPlatform_TerminalSupportsColour();
+
+    buffer = malloc(RhPATH_MAX);
+    RhPlatform_GetUserHomeDirectory(buffer, RhPATH_MAX);
+    out->rhodiusDataDirectory = RhUtil_ResolvePath(2, buffer, ".rhodius"); // ~/.rhodius
+    free(buffer); // Avoiding memory leaks since 2022
+    if (!RhPlatform_FileExists(out->rhodiusDataDirectory)) {
+        RhPlatform_MakeDirectoryRecursive(out->rhodiusDataDirectory);
+    }
+
+    struct RhPlatform_TerminalCapabilities termCap;
+    RhPlatform_GetTerminalCapabilities(&termCap);
+    out->enableTerminalColours = termCap.colours;
 }
 
 enum RhOptionsParserState {
@@ -91,9 +104,9 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
                 }
                 if (arg[1] == 's' || arg[1] == 'v') {
                     // silent
-                    int value = 0;
-                    for (int i = 1; i < argl; i++) {
-                        switch (arg[i]) {
+                    int16_t value = 0;
+                    for (int j = 1; j < argl; j++) {
+                        switch (arg[j]) {
                             case 's':
                                 value--;
                                 continue;
@@ -102,7 +115,7 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
                                 continue;
                         }
                     }
-                    out->verbosity += i;
+                    out->verbosity += value;
                 }
             }
         }
@@ -113,8 +126,8 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
     return 0;
 }
 const struct RhOptions* RhOptions_Get() {
-    return g_options;
+    return RhOptions_Instance;
 }
 void RhOptions_Set(const struct RhOptions* options) {
-    g_options = options;
+    RhOptions_Instance = options;
 }

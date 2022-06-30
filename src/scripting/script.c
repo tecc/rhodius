@@ -1,6 +1,6 @@
 #include <malloc.h>
-#include <rhodius/_platform.h>
 #include <rhodius/log.h>
+#include <rhodius/platform.h>
 #include <rhodius/scripting/_script.h>
 #include <rhodius/scripting/script.h>
 #include <stdlib.h>

@@ -1,8 +1,8 @@
 #include <cwalk.h>
 #include <malloc.h>
-#include <rhodius/_platform.h>
 #include <rhodius/_util.h>
 #include <rhodius/options.h>
+#include <rhodius/platform.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -15,12 +15,12 @@ char* RhUtil_CopyString(const char* string) {
 }
 char* RhUtil_ResolvePath(size_t count, ...) {
     if (count < 1) {
-        return NULL;
+        return NULL; // Just in case, the all-time developer classic
     }
 
     va_list argp;
     va_start(argp, count);
-    char buf[PATH_MAX];
+    char buf[PATH_MAX]; // Just a temporary buffer so previous isn't being read and written at the same time
     char* previous = malloc(PATH_MAX * sizeof(char));
     strcpy(previous, RhUtil_GetWorkingDirectory());
     for (int i = 0; i < count; i++) {

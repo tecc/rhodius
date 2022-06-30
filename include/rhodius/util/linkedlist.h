@@ -1,20 +1,20 @@
 #ifndef RHODIUS_LINKEDLIST_H
 #define RHODIUS_LINKEDLIST_H
 
-struct RhList;
-struct RhListNode;
+struct RhLinkedList;
+struct RhLinkedListNode;
 
-struct RhList {
-    struct RhListNode* first;
-    struct RhListNode* last;
+struct RhLinkedList {
+    struct RhLinkedListNode* first;
+    struct RhLinkedListNode* last;
 };
-struct RhListNode {
-    struct RhListNode* previous;
-    struct RhListNode* next;
+struct RhLinkedListNode {
+    struct RhLinkedListNode* previous;
+    struct RhLinkedListNode* next;
     void* value;
 };
 
-void RhList_Create(struct RhList* out);
-void RhList_Append(struct RhList* list, struct RhListNode* node);
+void RhList_Create(struct RhLinkedList* out);
+void RhList_Append(struct RhLinkedList* list, struct RhLinkedListNode* node);
 
 #endif

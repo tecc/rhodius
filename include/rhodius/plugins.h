@@ -6,7 +6,6 @@
 #include <rhodius/api/errors.h>
 
 enum RhAPI_Error RhPlugins_Initialise();
-const struct RhList* RhPlugins_GetList();
-
+const struct RhLinkedList* RhPlugins_GetList();
 
 #endif

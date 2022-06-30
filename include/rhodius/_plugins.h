@@ -4,7 +4,7 @@
 #include <rhodius/util/linkedlist.h>
 
 struct RhPlugins_Instance {
-    struct RhList pluginList;
+    struct RhLinkedList pluginList;
 };
 
 #endif

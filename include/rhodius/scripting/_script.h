@@ -3,7 +3,7 @@
 
 #include "script.h"
 
-#include <rhodius/ext/lua.h>
+#include <rhodius/api/lua.h>
 
 struct RhScript_Data {
     lua_State* state;
