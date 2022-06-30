@@ -20,7 +20,7 @@ add_executable(rhodius
 
 find_package(Lua REQUIRED)
 add_subdirectory(ext/cwalk)
-add_subdirectory(librhodius)
+add_subdirectory(api)
 add_subdirectory(plugins)
 
 target_link_libraries(rhodius ${LUA_LIBRARIES} cwalk rhodius-api)
