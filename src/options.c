@@ -40,10 +40,12 @@ enum RhOptionsParserState {
 int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
     enum RhOptionsParserState state = Rh_Waiting;
 
-    char** others = malloc(16 * sizeof(char*));
-    int positionals = 0;
+    char** positionals = malloc(1);
+    int positionalCount = 0;
 
     void* temp;
+
+    int tempi;
 
     for (int i = 1; i < argc; i++) {
 
@@ -53,7 +55,11 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
         switch (state) {
             case Rh_OnlyPositionals:
             RhAddPositional:
-                others[positionals++] = arg;
+                tempi = positionalCount;
+                positionalCount++;
+                positionals = realloc(positionals, sizeof(char*) * positionalCount);
+                positionals[tempi] = arg;
+
                 continue;
             case Rh_MainBuildFile:
                 temp = malloc(argl * sizeof(char));
@@ -116,12 +122,16 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
                         }
                     }
                     out->verbosity += value;
+                    continue;
                 }
             }
         }
 
         goto RhAddPositional;
     }
+
+    out->argv = positionals;
+    out->argc = positionalCount;
 
     return 0;
 }

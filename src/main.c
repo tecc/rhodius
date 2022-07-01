@@ -92,6 +92,11 @@ int main(int argc, char** argv) {
 
     printHeader();
 
+    /*RhLog_Trace("Positional argument count: %i", options->argc);
+    for (int i = 0; i < options->argc; i++) {
+        RhLog_Debug("Positional argument %i: %s", i, options->argv[i]);
+    }*/
+
     initialisePlugins();
     registerPlugins();
 

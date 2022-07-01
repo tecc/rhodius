@@ -10,6 +10,10 @@ struct RhOptions {
     const char* rhodiusDataDirectory;
     int16_t verbosity;
     bool enableTerminalColours : 1;
+
+    // Positionals
+    char** argv;
+    int argc;
 };
 
 void RhOptions_SetDefault(struct RhOptions* out);
