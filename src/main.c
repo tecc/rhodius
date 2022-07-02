@@ -97,6 +97,10 @@ int main(int argc, char** argv) {
         RhLog_Debug("Positional argument %i: %s", i, options->argv[i]);
     }*/
 
+    if (options->argc < 1) {
+
+    }
+
     initialisePlugins();
     registerPlugins();
 

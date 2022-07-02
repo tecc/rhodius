@@ -28,6 +28,11 @@ void RhOptions_SetDefault(struct RhOptions* out) {
     struct RhPlatform_TerminalCapabilities termCap;
     RhPlatform_GetTerminalCapabilities(&termCap);
     out->enableTerminalColours = termCap.colours;
+
+    out->argc = 0;
+    out->argv = NULL;
+    out->argv_noOptions = 0;
+    out->argv_noOptions = NULL;
 }
 
 enum RhOptionsParserState {
@@ -41,7 +46,9 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
     enum RhOptionsParserState state = Rh_Waiting;
 
     char** positionals = malloc(1);
+    char** firstNonoptPositional = malloc(1);
     int positionalCount = 0;
+    int nonoptPositionalCount = 0;
 
     void* temp;
 
@@ -54,11 +61,20 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
 
         switch (state) {
             case Rh_OnlyPositionals:
+                goto RhAddOnlyPositional;
             RhAddPositional:
-                tempi = positionalCount;
-                positionalCount++;
-                positionals = realloc(positionals, sizeof(char*) * positionalCount);
-                positionals[tempi] = arg;
+                if (argl >= 1 && arg[0] != '-' && firstNonoptPositional == NULL) {
+                    tempi = nonoptPositionalCount;
+                    nonoptPositionalCount++;
+                    firstNonoptPositional = realloc(firstNonoptPositional, nonoptPositionalCount * sizeof(char*));
+                    firstNonoptPositional[tempi] = arg;
+                } else {
+                RhAddOnlyPositional:
+                    tempi = positionalCount;
+                    positionalCount++;
+                    positionals = realloc(positionals, sizeof(char*) * positionalCount);
+                    positionals[tempi] = arg;
+                }
 
                 continue;
             case Rh_MainBuildFile:
@@ -132,6 +148,8 @@ int RhOptions_Parse(struct RhOptions* out, int argc, char** argv) {
 
     out->argv = positionals;
     out->argc = positionalCount;
+    out->argv_noOptions = firstNonoptPositional;
+    out->argc_noOptions = positionalCount;
 
     return 0;
 }

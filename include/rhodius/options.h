@@ -11,9 +11,11 @@ struct RhOptions {
     int16_t verbosity;
     bool enableTerminalColours : 1;
 
-    // Positionals
+    // Rest of arguments
     char** argv;
     int argc;
+    char** argv_noOptions; // Without options
+    int argc_noOptions;
 };
 
 void RhOptions_SetDefault(struct RhOptions* out);
